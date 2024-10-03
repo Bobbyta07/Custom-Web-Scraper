@@ -7,6 +7,24 @@ import time
 
 count = 1
 
+
+# clean rating
+def clean_rating(value):
+    global count
+    new_rating = []
+    for n in value:
+        if count % 2 != 0 and count <= 7:
+            new_rating.append(n)
+
+
+        elif count > 7 and count % 2 == 0:
+            new_rating.append(n)
+
+        count += 1
+
+    return new_rating
+
+
 # prevent browser from closing by itself
 
 chrome_options = webdriver.ChromeOptions()
@@ -30,19 +48,7 @@ rating = [rating_label.getText() for rating_label in soup.select(selector='li.ra
 #  clean  Data
 audio_length = [item.split('Length:')[1] for item in audio_length]
 authors_name_list = [item.find('a').getText() for item in authors_name_list]
-
-new_rating = []
-for n in rating:
-    if count % 2 != 0 and count <= 7:
-        new_rating.append(n)
-
-
-    elif count > 7 and count % 2 == 0:
-        new_rating.append(n)
-
-    count += 1
-
-rating = new_rating
+rating = clean_rating(rating)
 
 #______________________________________________Selenium driver __________________________
 
@@ -66,6 +72,7 @@ for n in range(len(authors_name_list)):
                                        value='//*[@id="mG61Hd"]/div[2]/div/div[2]/div[4]/div/div/div[2]/div/div[1]/div/div[1]/input')
     button = driver.find_element(by=By.XPATH, value='//*[@id="mG61Hd"]/div[2]/div/div[3]/div[1]/div[1]/div/span/span')
 
+    # data entry
     author_input.send_keys(authors_name_list[n])
     narrator_input.send_keys(narrated_by[n])
     audio_input.send_keys(audio_length[n])
@@ -74,3 +81,7 @@ for n in range(len(authors_name_list)):
     time.sleep(2)
 
     button.click()
+
+
+# close browser
+driver.quit()
