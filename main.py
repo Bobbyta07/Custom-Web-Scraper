@@ -25,13 +25,8 @@ def clean_rating(value):
     return new_rating
 
 
-# prevent browser from closing by itself
+# _________________________________________________ Beautiful Soup __________________________________
 
-chrome_options = webdriver.ChromeOptions()
-chrome_options.add_experimental_option('detach', True)
-
-# chrome driver instance
-driver = webdriver.Chrome(options=chrome_options)
 
 response = requests.get('https://www.audible.com/search?keywords=book&node=18573211011')
 
@@ -52,6 +47,13 @@ rating = clean_rating(rating)
 
 #______________________________________________Selenium driver __________________________
 
+# prevent browser from closing by itself
+
+chrome_options = webdriver.ChromeOptions()
+chrome_options.add_experimental_option('detach', True)
+
+# chrome driver instance
+driver = webdriver.Chrome(options=chrome_options)
 
 for n in range(len(authors_name_list)):
     driver.get(
@@ -81,7 +83,6 @@ for n in range(len(authors_name_list)):
     time.sleep(2)
 
     button.click()
-
 
 # close browser
 driver.quit()
